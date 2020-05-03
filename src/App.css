@@ -13,6 +13,25 @@
   }
 }
 
+.lets-begin {
+  padding: 10px;
+  border: none;
+  background: #32b3e6;
+  font-size: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+  margin: 10px;
+}
+
+.lets-begin > a {
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+}
+
+.button-holder {
+  display: flex;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
