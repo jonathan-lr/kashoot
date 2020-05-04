@@ -22,7 +22,7 @@ class JoinRoom extends React.Component {
         return (
             <>
                 <p>
-                    Enter Room Node
+                    Enter Room Node & Name
                 </p>
                 <label>
                     ID:
