@@ -28,6 +28,12 @@
   padding: 10px;
 }
 
+.name-box {
+  background: white;
+  width: 80vw;
+  height: 40vh;
+}
+
 .button-holder {
   display: flex;
 }

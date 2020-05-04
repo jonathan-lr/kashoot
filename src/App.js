@@ -5,6 +5,7 @@ import Home from "./Home/Home";
 import JoinRoom from "./JoinRoom/JoinRoom";
 import HostJoin from "./HostJoin/HostJoin";
 import CreateRoom from "./CreateRoom/CreateRoom";
+import Session from "./Session/Session";
 
 export default function App() {
     return (
@@ -12,6 +13,7 @@ export default function App() {
             <div className="App">
                 <header className="App-header">
                     <Switch>
+                        <Route path="/session/:id" component={Session} />
                         <Route path="/join" component={JoinRoom} />
                         <Route path="/create" component={CreateRoom} />
                         <Route path="/next" component={HostJoin} />
