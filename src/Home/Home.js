@@ -11,7 +11,7 @@ class Home extends React.Component {
                 <p>
                     Here we want to kashoot our selves
                 </p>
-                <button className="lets-begin"><Link to="/next">Lets Begin</Link></button>
+                <button className="lets-begin"><Link to="/play">Lets Begin</Link></button>
             </>
         );
     }
