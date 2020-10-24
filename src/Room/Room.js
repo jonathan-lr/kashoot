@@ -2,6 +2,7 @@ import React from 'react';
 import io from 'socket.io-client';
 import howling from './howling.mp3'
 import Timer from "react-compound-timer";
+import './room.css'
 const socket = io('http://92.239.26.13:27015');
 
 var audio = new Audio(howling);
@@ -220,15 +221,15 @@ class Room extends React.Component {
                             )}
                         </Timer>
                         {type === 2
-                            ? <span style={{width:'600px', height:'400px', background:'#252525', display: 'flex', flexDirection: 'column', alignItems:'center', justifyContent:'center', marginBottom:'10px'}}><div>{question}</div><img style={{width:"100%"}} src={img} /></span>
-                            : <span style={{width:'600px', height:'80px', background:'#252525', display: 'flex', alignItems:'center', justifyContent:'center', marginBottom:'10px'}}>{question}</span>}
+                            ? <span className="question-norm question-img"><div>{question}</div><img style={{width:"100%"}} src={img} /></span>
+                            : <span className="question-norm">{question}</span>}
                         <div style={{display: "flex"}}>
-                            <div style={{width: "250px", height: "150px", background:"#ae0000", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px"}}><span>{answers[0]}</span></div>
-                            <div style={{width: "250px", height: "150px", background:"#5656d7", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px"}}><span>{answers[1]}</span></div>
+                            <div className="display-answer red"><span>{answers[0]}</span></div>
+                            <div className="display-answer blue"><span>{answers[1]}</span></div>
                         </div>
                         <div style={{display: "flex"}}>
-                            <div style={{width: "250px", height: "150px", background:"#197219", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px"}}><span>{answers[2]}</span></div>
-                            <div style={{width: "250px", height: "150px", background:"#c6922f", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px"}}><span>{answers[3]}</span></div>
+                            <div className="display-answer green"><span>{answers[2]}</span></div>
+                            <div className="display-answer orange"><span>{answers[3]}</span></div>
                         </div>
                     </>
                 )
@@ -276,16 +277,17 @@ class Room extends React.Component {
             if (answer) {
                 return (
                     <>
-                        <form>
-                            <div style={{display: "flex"}}>
-                                <button onClick={ () => this.answer(1)} style={{width: "250px", height: "100px", background:"#ae0000", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", border:'none'}}><span>A</span></button>
-                                <button onClick={ () => this.answer(2)} style={{width: "250px", height: "100px", background:"#5656d7", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", border:'none'}}><span>B</span></button>
-                            </div>
-                            <div style={{display: "flex"}}>
-                                <button onClick={ () => this.answer(3)} style={{width: "250px", height: "100px", background:"#197219", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", border:'none'}}><span>C</span></button>
-                                <button onClick={ () => this.answer(4)} style={{width: "250px", height: "100px", background:"#c6922f", margin:"10px", display:"flex", alignItems: "center", justifyContent: "center", borderRadius: "8px", border:'none'}}><span>D</span></button>
-                            </div>
-                        </form>
+                        <div style={{display: "flex"}}>
+                            <button onClick={ () => this.answer(1)} className="display-answer red"><span>A</span></button>
+                            <button onClick={ () => this.answer(2)} className="display-answer blue"><span>B</span></button>
+                        </div>
+                        <div style={{display: "flex"}}>
+                            <button onClick={ () => this.answer(3)} className="display-answer green"><span>C</span></button>
+                            <button onClick={ () => this.answer(4)} className="display-answer orange"><span>D</span></button>
+                        </div>
+                        <div className="btn btn-one" onClick={ () => this.answer(5)}>
+                            <span>Lies</span>
+                        </div>
                     </>
                 )
             } else if (next) {
