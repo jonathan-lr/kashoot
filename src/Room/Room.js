@@ -1,11 +1,21 @@
 import React from 'react';
 import io from 'socket.io-client';
-import howling from './howling.mp3'
+import loop1 from './loop 1.wav'
+import loop2 from './loop 2.wav'
+import loop3 from './loop 3.wav'
 import Timer from "react-compound-timer";
 import './room.css'
 const socket = io('http://92.239.26.13:27015');
 
-var audio = new Audio(howling);
+var l1 = new Audio(loop1);
+var l2 = new Audio(loop2);
+var l3 = new Audio(loop3);
+l1.loop = true;
+l2.loop = true;
+l3.loop = true;
+l1.volume = 0.1;
+l2.volume = 0.1;
+l3.volume = 0.1;
 
 class Room extends React.Component {
     constructor(props) {
@@ -18,6 +28,7 @@ class Room extends React.Component {
 
         this.state = {
             name: '',
+            user: '',
             room: '',
             menu: true,
             host: false,
@@ -38,12 +49,20 @@ class Room extends React.Component {
 
     renderPlayers() {
         return this.state.players.map(({name}, index) => (
-            <div key={index} style={{marginRight:'20px', fontWeight:'600', height:'40px'}}>
-                <span>
-                    {name}
-                </span>
+            <div key={index} style={{marginBottom: '1em', fontWeight:'600', height:'40px', marginRight:'20px'}}>
+                <button className="field-button" onClick={ () => this.kick(name)}>{name}</button>
             </div>
         ))
+    }
+
+    kick(name) {
+        socket.emit('kicks', {name})
+        var removeIndex = this.state.players.map(item => item.name).indexOf(name);
+        var temp = this.state.players
+        ~removeIndex && temp.splice(removeIndex, 1);
+        this.setState({
+            players: temp,
+        })
     }
 
     onTextChange(e) {
@@ -68,18 +87,36 @@ class Room extends React.Component {
             join: true,
         })
 
+        socket.on('taken', () => {
+            this.setState({
+                menu: true,
+                join: false,
+                play: false
+            })
+            window.alert("Username Taken :P")
+        })
+
+        socket.on('kick', () => {
+            this.setState({
+                menu: true,
+                join: false,
+                play: false
+            })
+            window.alert("You have been kicked by host :(")
+        })
+
         socket.on('player', ({q}) => {
             this.setState({
                 question: q,
                 answer: true,
                 next: false,
             })
-            audio.play();
-            audio.volume = 0.02;
         })
 
-        socket.on('next', () => {
+        socket.on('next', ({score}) => {
             this.setState({
+                score: score,
+                user: this.state.name,
                 answer: false,
                 answered: false,
                 next: true,
@@ -108,6 +145,9 @@ class Room extends React.Component {
             this.setState({
                 room: room,
             })
+            l1.play();
+            l3.pause();
+            l2.pause();
         })
 
         socket.on('players', ({name}) => {
@@ -127,8 +167,9 @@ class Room extends React.Component {
                 answer: true,
                 next: false,
             })
-            audio.play();
-            audio.volume = 0.02;
+            l1.pause();
+            l3.pause();
+            l2.play();
         })
 
         socket.on('next', ({score}) => {
@@ -146,7 +187,9 @@ class Room extends React.Component {
                 finished: true,
                 score: score,
             })
-            console.log(score)
+            l1.pause();
+            l3.play();
+            l2.pause();
         })
 
         socket.emit('host')
@@ -171,14 +214,14 @@ class Room extends React.Component {
     }
 
     render() {
-        const { name, room, menu, join, host, play, question, answer, answers, answered, next, score, type, finished, img } = this.state;
+        const { name, room, menu, join, host, play, question, answer, answers, answered, next, score, type, finished, img, user } = this.state;
         if (menu) {
             return (
                 <>
-                    Main Menu
-                    <div style={{display: 'flex'}}>
-                        <button className="lets-begin" onClick={this.joinMenu}>Join</button>
-                        <button className="lets-begin" onClick={this.hostMenu}>Host</button>
+                    <div className="login-box">
+                        Main Menu
+                        <button className="field-button em1" onClick={this.joinMenu}>Join</button>
+                        <button className="field-button em1" onClick={this.hostMenu}>Host</button>
                     </div>
                 </>
             )
@@ -186,16 +229,14 @@ class Room extends React.Component {
             return (
                 <>
                     <div style={{display: "flex"}}>
-                        <form onSubmit={this.joinGame} style={{background: "#004b83", padding:"10px", borderRadius:"10px"}}>
-                            <div className="name-field">
-                                <span>Name : </span>
-                                <input name="name" onChange={e => this.onTextChange(e)} value={name} lable="Name" />
+                        <form onSubmit={this.joinGame} className="login-box">
+                            <div className="field-text">
+                                <input name="name" onChange={e => this.onTextChange(e)} value={name} placeholder="Name" />
                             </div>
-                            <div>
-                                <span>Room : </span>
-                                <input name="room" onChange={e => this.onTextChange(e)} value={room} lable="Room" />
+                            <div className="field-text">
+                                <input name="room" onChange={e => this.onTextChange(e)} value={room} placeholder="Room" />
                             </div>
-                            <button className="lets-begin">Join</button>
+                            <button className="field-button">Join</button>
                         </form>
                     </div>
                 </>
@@ -224,25 +265,29 @@ class Room extends React.Component {
                             ? <span className="question-norm question-img"><div>{question}</div><img style={{width:"100%"}} src={img} /></span>
                             : <span className="question-norm">{question}</span>}
                         <div style={{display: "flex"}}>
-                            <div className="display-answer red"><span>{answers[0]}</span></div>
-                            <div className="display-answer blue"><span>{answers[1]}</span></div>
+                            <div className="host-answer red"><span>{answers[0]}</span></div>
+                            <div className="host-answer blue"><span>{answers[1]}</span></div>
                         </div>
                         <div style={{display: "flex"}}>
-                            <div className="display-answer green"><span>{answers[2]}</span></div>
-                            <div className="display-answer orange"><span>{answers[3]}</span></div>
+                            <div className="host-answer green"><span>{answers[2]}</span></div>
+                            <div className="host-answer orange"><span>{answers[3]}</span></div>
                         </div>
                     </>
                 )
             } else if (next) {
                 return(
                     <>
-                        <h1>Scores</h1>
-                        {score.map((item) => (
-                            <div key={item.name}>
-                                <span>{item.name} | {item.score}</span>
-                            </div>
-                        ))}
-                        <button className="lets-begin" onClick={this.startGame}>Next</button>
+                        <div className="login-box">
+                            <div style={{marginBottom:'1em'}}>Scores</div>
+                            {score.map((item) => (
+                                <div className="leaderboard" key={item.name}>
+                                    <span style={{flex: '1'}}>{score.indexOf(item)+1}.</span>
+                                    <span style={{flex: '1'}}>{item.name}</span>
+                                    <span style={{flex: '1'}}>{item.score}</span>
+                                </div>
+                            ))}
+                            <button style={{marginTop:'1em'}} className="field-button" onClick={this.startGame}>Next</button>
+                        </div>
                     </>
                 )
             } else if (finished) {
@@ -265,11 +310,13 @@ class Room extends React.Component {
             } else {
                 return (
                     <>
-                        <p>Room Code Is {room}</p>
-                        <div style={{background:"#004b83", width:"800px", height:"500px", borderRadius:"10px", display:'flex', padding:'20px', flexWrap:'wrap', alignContent:'flex-start'}}>
-                            {this.renderPlayers()}
+                        <div className="host-box">
+                            <div style={{marginBottom:'1em'}}>Room Code Is {room}</div>
+                            <div style={{display:'flex'}}>
+                                {this.renderPlayers()}
+                            </div>
+                            <button className="field-button" onClick={this.startGame}>Start</button>
                         </div>
-                        <button className="lets-begin" onClick={this.startGame}>Start</button>
                     </>
                 )
             }
@@ -278,12 +325,12 @@ class Room extends React.Component {
                 return (
                     <>
                         <div style={{display: "flex"}}>
-                            <button onClick={ () => this.answer(1)} className="display-answer red"><span>A</span></button>
-                            <button onClick={ () => this.answer(2)} className="display-answer blue"><span>B</span></button>
+                            <button onClick={ () => this.answer(1)} className="display-answer red" />
+                            <button onClick={ () => this.answer(2)} className="display-answer blue" />
                         </div>
                         <div style={{display: "flex"}}>
-                            <button onClick={ () => this.answer(3)} className="display-answer green"><span>C</span></button>
-                            <button onClick={ () => this.answer(4)} className="display-answer orange"><span>D</span></button>
+                            <button onClick={ () => this.answer(3)} className="display-answer green" />
+                            <button onClick={ () => this.answer(4)} className="display-answer orange" />
                         </div>
                         <div className="btn btn-one" onClick={ () => this.answer(5)}>
                             <span>Lies</span>
@@ -293,7 +340,8 @@ class Room extends React.Component {
             } else if (next) {
                 return (
                     <>
-                        Get Ready For Next Question
+                        {console.log(score.find( ({ name }) => name === user ))}
+                        {(score.find( ({ name }) => name === user )).correct ? 'You Got That Correct. Get Ready For The Next Question' : 'You Got That Wrong. Get Ready For The Next Question'}
                     </>
                 )
             } else if (answered) {
