@@ -5,7 +5,7 @@ import loop2 from './loop 2.wav'
 import loop3 from './loop 3.wav'
 import Timer from "react-compound-timer";
 import './room.css'
-const socket = io('http://92.239.26.13:27015');
+const socket = io('http://localhost:27015');
 
 var l1 = new Audio(loop1);
 var l2 = new Audio(loop2);
