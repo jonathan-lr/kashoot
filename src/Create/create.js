@@ -8,6 +8,7 @@ class Create extends React.Component {
         this.RemoveQuestion = this.RemoveQuestion.bind(this);
         this.EditQuestion = this.EditQuestion.bind(this);
         this.QuizComplete = this.QuizComplete.bind(this);
+        this.EditName = this.EditName.bind(this);
         //properties:
         this.state = {
             QuizName: '',
@@ -19,7 +20,8 @@ class Create extends React.Component {
         }
     }
 
-    AddQuestion() {
+
+    AddQuestion() { // question menu, ask for question and 4 answers
         
     }
 
@@ -40,8 +42,8 @@ class Create extends React.Component {
 
     }
     //Events:
-    EditName(e){
-        this.setState({QuizName: e.target.value})
+    EditName(event){
+        this.setState({QuizName: event.target.value})
     }
 
     //Renders:
@@ -64,11 +66,18 @@ class Create extends React.Component {
                     <p>
                         QuizName:
                         <input type="text" name="desc" defaultValue={QuizName} onChange={this.EditName}/>
+                        
                     </p>
-                    <div className="Quiz-Name-field">
-                        Main Menu
-                        <button className="field-button em1" onClick={this.joinMenu}>Join</button>
-                        <button className="field-button em1" onClick={this.hostMenu}>Host</button>
+                    <p>
+                        <div style={{display:'flex'}}>
+                                {this.RenderQuestions()}
+                        </div>
+                    </p>
+                    
+                    <div className="Quiz-Name-field"> 
+                        Main Menu (turn this into a sidebar)
+                        <button className="field-button em1" onClick={this.EditQuestion}>Edit</button>
+                        <button className="field-button em1" onClick={this.AddQuestion}>Add Question</button>
                     </div>
                 </>
             );
