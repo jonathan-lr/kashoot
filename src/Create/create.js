@@ -1,5 +1,26 @@
 import React from "react";
+class Question{
+    //properties:
+    question = "QUESTION TEXT";
+    img = "IMG URL";
+    answers = []; //answers to the question (len 4)
+    correct = []; //correct answers (up to len 4)
+    trick = []; //location of trick answers in Question
+    type = 0; //type 1: normal type 2: image
 
+    // methods:
+    //Setters:
+    SetName(name){
+        this.question = name;
+    }
+    SetImg(URL){
+        this.img = URL;
+    }
+    SetAnswers(arr){
+        this.answers = [];
+    }
+    //etc.
+}
 class Create extends React.Component {
     constructor(props){
         // methods:
@@ -9,6 +30,7 @@ class Create extends React.Component {
         this.EditQuestion = this.EditQuestion.bind(this);
         this.QuizComplete = this.QuizComplete.bind(this);
         this.EditName = this.EditName.bind(this);
+
         //properties:
         this.state = {
             QuizName: '',
@@ -22,6 +44,8 @@ class Create extends React.Component {
 
 
     AddQuestion() { // question menu, ask for question and 4 answers
+        this.setState({menu: false, Edit: true})
+        var Q = new Question();
         
     }
 
@@ -82,7 +106,7 @@ class Create extends React.Component {
                 </>
             );
         }
-        else if(Edit){ // edit selected question
+        else if(Edit){ // edit mode
 
         }
         else if(Done){ // JSON donwload
