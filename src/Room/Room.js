@@ -262,7 +262,7 @@ class Room extends React.Component {
                             )}
                         </Timer>
                         {type === 2
-                            ? <span className="question-norm question-img"><div>{question}</div><img style={{width:"100%"}} src={img} /></span>
+                            ? <span className="question-norm question-img"><div>{question}</div><img style={{width:"100%"}} src={img} alt="question" /></span>
                             : <span className="question-norm">{question}</span>}
                         <div style={{display: "flex"}}>
                             <div className="host-answer red"><span>{answers[0]}</span></div>
