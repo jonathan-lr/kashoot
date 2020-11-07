@@ -41,22 +41,6 @@
     background: #c6922f;
 }
 
-.question-norm {
-    width: 600px;
-    height: 80px;
-    background: #252525;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.question-img {
-    height: 400px;
-    flex-direction: column;
-}
-
 .btn {
     line-height: 50px;
     height: 50px;
@@ -117,6 +101,28 @@
     transform: scale(0.1, 1);
 }
 
+.question-box {
+    padding: 1em;
+    position: relative;
+    background: rgba(0, 0, 0, 0.15);
+    width: 50vw;
+    max-width: 17em;
+}
+
+.question-box:before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(to right, #35c3c1, #00d6b7);
+}
+
+.question-font {
+    font-size: 30px;
+    font-weight: 500;
+    padding-bottom: 20px;
+}
+
 .login-box {
     padding: 2em;
     position: relative;
@@ -131,6 +137,80 @@
     top: -2px; left: 0;
     height: 2px; width: 100%;
     background: linear-gradient(to right, #35c3c1, #00d6b7);
+}
+
+.score-box {
+    padding: 2em;
+    position: relative;
+    background: rgba(0, 0, 0, 0.15);
+    width: 50vw;
+    max-width: 25em;
+}
+
+.score-box:before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(to right, #35c3c1, #00d6b7);
+}
+
+.error-box {
+    padding: 2em;
+    background: rgba(0, 0, 0, 0.15);
+    width: 50vw;
+    max-width: 12em;
+    position: absolute;
+    top: 100px;
+}
+
+.error-box:before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(to right, #7a0000, #f80000);
+}
+
+.timer-box {
+    padding: 1em;
+    background: rgba(0, 0, 0, 0.15);
+    width: 50vw;
+    max-width: 2em;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+}
+
+.timer-box:before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(to right, #7a0000, #f80000);
+}
+
+.timer-text {
+    animation: flicker 3s linear infinite;
+    color: #920000;
+    font-size: 50px;
+    font-weight: 900;
+    font-family: system-ui;
+}
+
+@keyframes flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+        opacity: .99;
+        text-shadow: 0 -2px 8px, 0 0 2px, 0 0 5px #ff7e00, 0 0 15px #ff4444, 0 0 2px #ff7e00, 0 2px 3px #000;
+    }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+        opacity: 0.4;
+        text-shadow: none;
+    }
+}
+
+.hidden {
+    display: none;
 }
 
 .field-text {
@@ -186,4 +266,6 @@
     margin-bottom: 5px;
     background: #f34e4e;
     display: flex;
+    justify-content: space-between;
+    padding: 10px;
 }

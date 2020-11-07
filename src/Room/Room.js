@@ -5,7 +5,7 @@ import loop2 from './loop 2.wav'
 import loop3 from './loop 3.wav'
 import Timer from "react-compound-timer";
 import './room.css'
-const socket = io('http://92.239.26.13:27015');
+const socket = io('http://ts.cosmicreach.co.uk:27015');
 
 var l1 = new Audio(loop1);
 var l2 = new Audio(loop2);
@@ -38,6 +38,7 @@ class Room extends React.Component {
             next: false,
             answered: false,
             finished: false,
+            error: '',
             players: [],
             question: '',
             img: '',
@@ -87,22 +88,28 @@ class Room extends React.Component {
             join: true,
         })
 
+        socket.on('room', () => {
+            this.setState({
+                join: true,
+                play: false,
+                error: 'Room does not exist'
+            })
+        })
+
         socket.on('taken', () => {
             this.setState({
-                menu: true,
-                join: false,
-                play: false
+                join: true,
+                play: false,
+                error: 'Username Taken'
             })
-            window.alert("Username Taken :P")
         })
 
         socket.on('kick', () => {
             this.setState({
-                menu: true,
-                join: false,
-                play: false
+                join: true,
+                play: false,
+                error: 'You have been kicked'
             })
-            window.alert("You have been kicked by host :(")
         })
 
         socket.on('player', ({q}) => {
@@ -214,7 +221,7 @@ class Room extends React.Component {
     }
 
     render() {
-        const { name, room, menu, join, host, play, question, answer, answers, answered, next, score, type, finished, img, user } = this.state;
+        const { name, room, menu, join, host, play, question, answer, answers, answered, next, score, type, finished, img, user, error } = this.state;
         if (menu) {
             return (
                 <>
@@ -229,6 +236,7 @@ class Room extends React.Component {
             return (
                 <>
                     <div style={{display: "flex"}}>
+                        <div className={"error-box " + (error === '' ? 'hidden' : '')}>{error}</div>
                         <form onSubmit={this.joinGame} className="login-box">
                             <div className="field-text">
                                 <input name="name" onChange={e => this.onTextChange(e)} value={name} placeholder="Name" />
@@ -245,25 +253,29 @@ class Room extends React.Component {
             if (answer) {
                 return (
                     <>
-                        <Timer
-                            initialTime={45000}
-                            direction="backward"
-                            checkpoints={[
-                                {
-                                    time: 0,
-                                    callback: this.nextQuestion,
-                                }
-                            ]}
-                        >
-                            {() => (
-                                <React.Fragment>
-                                    <Timer.Seconds /> seconds
-                                </React.Fragment>
-                            )}
-                        </Timer>
+                        <div className="timer-box">
+                            <Timer
+                                initialTime={45000}
+                                direction="backward"
+                                checkpoints={[
+                                    {
+                                        time: 0,
+                                        callback: this.nextQuestion,
+                                    }
+                                ]}
+                            >
+                                {() => (
+                                    <React.Fragment>
+                                        <div className="timer-text">
+                                            <Timer.Seconds />
+                                        </div>
+                                    </React.Fragment>
+                                )}
+                            </Timer>
+                        </div>
                         {type === 2
-                            ? <span className="question-norm question-img"><div>{question}</div><img style={{width:"100%"}} src={img} alt="question" /></span>
-                            : <span className="question-norm">{question}</span>}
+                            ? <span className="question-box"><div className="question-font">{question}</div><img style={{width:"100%"}} src={img} alt="question" /></span>
+                            : <span className="question-box">{question}</span>}
                         <div style={{display: "flex"}}>
                             <div className="host-answer red"><span>{answers[0]}</span></div>
                             <div className="host-answer blue"><span>{answers[1]}</span></div>
@@ -277,13 +289,13 @@ class Room extends React.Component {
             } else if (next) {
                 return(
                     <>
-                        <div className="login-box">
+                        <div className="score-box">
                             <div style={{marginBottom:'1em'}}>Scores</div>
                             {score.map((item) => (
                                 <div className="leaderboard" key={item.name}>
-                                    <span style={{flex: '1'}}>{score.indexOf(item)+1}.</span>
+                                    <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
                                     <span style={{flex: '1'}}>{item.name}</span>
-                                    <span style={{flex: '1'}}>{item.score}</span>
+                                    <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score} {item.correct ? '✔' : '✘'}</span>
                                 </div>
                             ))}
                             <button style={{marginTop:'1em'}} className="field-button" onClick={this.startGame}>Next</button>
@@ -312,7 +324,7 @@ class Room extends React.Component {
                     <>
                         <div className="host-box">
                             <div style={{marginBottom:'1em'}}>Room Code Is {room}</div>
-                            <div style={{display:'flex'}}>
+                            <div style={{display:'flex', flexWrap:'wrap'}}>
                                 {this.renderPlayers()}
                             </div>
                             <button className="field-button" onClick={this.startGame}>Start</button>
@@ -333,7 +345,7 @@ class Room extends React.Component {
                             <button onClick={ () => this.answer(4)} className="display-answer orange" />
                         </div>
                         <div className="btn btn-one" onClick={ () => this.answer(5)}>
-                            <span>Lies</span>
+                            <span>Fake</span>
                         </div>
                     </>
                 )
