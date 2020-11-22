@@ -72,6 +72,7 @@ class local extends React.Component {
         socket.emit('rejoin', {name, room})
     }
 
+
     componentWillUnmount() {
         window.removeEventListener(
             "beforeunload",
@@ -151,6 +152,10 @@ class local extends React.Component {
             if (answer) {
                 return (
                     <>
+                        <div className="top-bar">
+                            <div>Name : {name}</div>
+                            <div>Room : {room}</div>
+                        </div>
                         <div style={{display: "flex"}}>
                             <button onClick={ () => this.answer(1)} className="display-answer red" />
                             <button onClick={ () => this.answer(2)} className="display-answer blue" />
@@ -167,18 +172,31 @@ class local extends React.Component {
             } else if (next) {
                 return (
                     <>
-                        {last.includes((score.find( ({ name }) => name === user )).correct) ? 'You Got That Correct. Get Ready For The Next Question' : 'You Got That Wrong. Get Ready For The Next Question'}
+                        <div className="top-bar">
+                            <div>Name : {name}</div>
+                            <div>Room : {room}</div>
+                        </div>
+                        <div className={last.includes((score.find( ({ name }) => name === user )).correct) ? 'correct' : 'incorrect'}></div>
+                        GET READY FOR THE NEXT QUESTION!
                     </>
                 )
             } else if (answered) {
                 return (
                     <>
-                        You Have Answered Wait For Others To Finish
+                        <div className="top-bar">
+                            <div>Name : {name}</div>
+                            <div>Room : {room}</div>
+                        </div>
+                        WAIT FOR OTHERS TO FINISH
                     </>
                 )
             } else if (finished) {
                 return(
                     <>
+                        <div className="top-bar">
+                            <div>Name : {name}</div>
+                            <div>Room : {room}</div>
+                        </div>
                         Quiz is over!
                         {score.map((item) => (
                             <div key={item.name}>
@@ -190,7 +208,11 @@ class local extends React.Component {
             } else {
                 return (
                     <>
-                        Get Ready For Host To Start
+                        <div className="top-bar">
+                            <div>Name : {name}</div>
+                            <div>Room : {room}</div>
+                        </div>
+                        GET READY FOR HOST TO START
                     </>
                 )
             }
