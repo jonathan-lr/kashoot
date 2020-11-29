@@ -20,6 +20,7 @@ l3.volume = 0.01;
 class host extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             answer: false,
             bar: false,
@@ -49,7 +50,6 @@ class host extends React.Component {
     }
 
     getBars(score) {
-        console.log(score)
         this.setState({
             red: 0,
             blue: 0,
@@ -59,23 +59,23 @@ class host extends React.Component {
         })
         let i;
         for (i = 0; i < score.length; i++) {
-            if (score[i].correct === 1) {
+            if (score[i].answer === 1) {
                 this.setState({
                     red: this.state.red + 1
                 })
-            } else if (score[i].correct === 2) {
+            } else if (score[i].answer === 2) {
                 this.setState({
                     blue: this.state.blue + 1
                 })
-            } else if (score[i].correct === 3) {
+            } else if (score[i].answer === 3) {
                 this.setState({
                     green: this.state.green + 1
                 })
-            } else if (score[i].correct === 4) {
+            } else if (score[i].answer === 4) {
                 this.setState({
                     yellow: this.state.yellow + 1
                 })
-            } else if (score[i].correct === 5) {
+            } else if (score[i].answer === 5) {
                 this.setState({
                     fake: this.state.fake + 1
                 })
@@ -92,7 +92,8 @@ class host extends React.Component {
     }
 
     kick(name) {
-        socket.emit('kicks', {name})
+        let room = this.state.room
+        socket.emit('kicks', {name, room})
         var removeIndex = this.state.players.map(item => item.name).indexOf(name);
         var temp = this.state.players
         ~removeIndex && temp.splice(removeIndex, 1);
@@ -172,11 +173,13 @@ class host extends React.Component {
     }
 
     startGame(){
-        socket.emit('start')
+        let room = this.state.room
+        socket.emit('start', {room})
     }
 
     nextQuestion(){
-        socket.emit('next')
+        let room = this.state.room
+        socket.emit('next', {room})
     }
 
     render() {
@@ -194,7 +197,7 @@ class host extends React.Component {
                                 checkpoints={[
                                     {
                                         time: 0,
-                                        callback: this.nextQuestion,
+                                        callback: () => this.nextQuestion(),
                                     }
                                 ]}
                             >
@@ -208,9 +211,20 @@ class host extends React.Component {
                             </Timer>
                         </div>
                         {type === 2
-                            ? <span style={{width: "80%", height: '20em'}} className="question-box"><div className="question-font">{question}</div><img src={img} alt="question" /></span>
-                            : <span style={{width: "80%", height: '20em'}} className="question-box">{question}</span>}
-                        <div className="questions-box">
+                            ? (
+                                <>
+                                    <span style={{width: "80%", height: '20em'}} className="question-box">
+                                        <div className="question-font">{question}</div>
+                                        <img src={img} alt="question" />
+                                    </span>
+                                </>
+                                )
+                            : (
+                                <>
+                                    <span style={{width: "80%", height: 'auto'}} className="question-box question-font">{question}</span>
+                                </>
+                            )}
+                        <div className={(type === 2 ? 'questions-box' : 'questions-box2')}>
                             <div style={{display: "flex"}}>
                                 <div className="host-answer red"><span>{answers[0]}</span></div>
                                 <div className="host-answer blue"><span>{answers[1]}</span></div>
@@ -255,13 +269,13 @@ class host extends React.Component {
                         <div className="score-box">
                             <div style={{marginBottom:'1em'}}>Scores</div>
                             {score.map((item) => (
-                                <button className="leaderboard" onClick={ () => this.kick(item.name)} key={item.name}>
+                                <button className="leaderboard" onClick={ () => this.kick(item.username)} key={item.username}>
                                     <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
-                                    <span style={{flex: '1'}}>{item.name}</span>
-                                    <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score} {last.correct.includes((score.find( ({ name }) => name === item.name )).correct) ? '✔' : '✘'}</span>
+                                    <span style={{flex: '1'}}>{item.username}</span>
+                                    <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score} {last.correct.includes((score.find( ({ username }) => username === item.username )).answer) ? '✔' : '✘'}</span>
                                 </button>
                             ))}
-                            <button style={{marginTop:'1em'}} className="field-button" onClick={this.startGame}>Next</button>
+                            <button style={{marginTop:'1em'}} className="field-button" onClick={ () => this.startGame()}>Next</button>
                         </div>
                     </>
                 )
@@ -271,13 +285,13 @@ class host extends React.Component {
                         <h3>Standings</h3>
                         <div style={{display:'flex'}}>
                             <div style={{width:'200px', height:'200px', marginTop:'50px', background:'#197219'}}>
-                                {score[1].name}
+                                {score[1].username}
                             </div>
                             <div style={{width:'200px', height:'250px', margin:'0 20px', background:'#ae0000'}}>
-                                {score[0].name}
+                                {score[0].username}
                             </div>
                             <div style={{width:'200px', height:'150px', marginTop:'100px', background:'#5656d7'}}>
-                                {score[2].name}
+                                {score[2].username}
                             </div>
                         </div>
                     </>
@@ -290,7 +304,7 @@ class host extends React.Component {
                             <div style={{display:'flex', flexWrap:'wrap'}}>
                                 {this.renderPlayers()}
                             </div>
-                            <button className="field-button" onClick={this.startGame}>START</button>
+                            <button className="field-button" onClick={ () => this.startGame()}>START</button>
                         </div>
                     </>
                 )

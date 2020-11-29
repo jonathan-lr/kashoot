@@ -123,6 +123,11 @@
     bottom: 20px;
 }
 
+.questions-box2 {
+    position: absolute;
+    bottom: 250px;
+}
+
 .question-box img {
     max-height: 16em;
     max-width: 58em;

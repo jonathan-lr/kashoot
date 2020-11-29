@@ -16,6 +16,7 @@ class local extends React.Component {
             room: '',
             error: '',
             question: '',
+            ans: '',
             last: 0,
             play: false,
             answer: false,
@@ -28,6 +29,30 @@ class local extends React.Component {
         }
     }
 
+    handleValidation(){
+        let name = this.state.name;
+        let room = this.state.room;
+        let valid = true;
+        let message = 'Invalid'
+
+        if (!name.match(/^[a-zA-Z]+$/)){
+            valid = false;
+            message += ' Name'
+        }
+
+        if (room.length !== 5) {
+            valid = false;
+            message += ' Room'
+        }
+
+        if (!valid){
+            this.setState({
+                error: message
+            })
+        }
+        return valid;
+    }
+
     onTextChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -36,12 +61,14 @@ class local extends React.Component {
 
     joinGame(e) {
         e.preventDefault();
-        const {name, room} = this.state;
-        socket.emit('join', {name, room})
-        this.setState({
-            play: true,
-            save: true
-        })
+        if (this.handleValidation()){
+            const {name, room} = this.state;
+            socket.emit('join', {name, room})
+            this.setState({
+                play: true,
+                save: true
+            })
+        }
     }
 
     saveStateToLocalStorage() {
@@ -92,16 +119,32 @@ class local extends React.Component {
             this.saveStateToLocalStorage.bind(this)
         );
 
-        socket.on('issue', ({message}) => {
-            this.setState({
-                play: false,
-                answer: false,
-                next: false,
-                answered: false,
-                save: false,
-                error: message,
-            })
-            localStorage.clear();
+        socket.on('issue', ({message, name}) => {
+            console.log(name)
+            if (name) {
+                if (name === this.state.name) {
+                    this.setState({
+                        play: false,
+                        answer: false,
+                        next: false,
+                        answered: false,
+                        save: false,
+                        error: message,
+                    })
+                    localStorage.clear();
+                }
+            } else {
+                this.setState({
+                    play: false,
+                    answer: false,
+                    next: false,
+                    answered: false,
+                    save: false,
+                    error: message,
+                })
+                localStorage.clear();
+            }
+
         })
 
         socket.on('player', ({q}) => {
@@ -113,9 +156,11 @@ class local extends React.Component {
         })
 
         socket.on('next', ({score, last}) => {
+            console.log(score)
+            console.log(last)
             this.setState({
                 score: score,
-                last: last.correct,
+                last: last,
                 user: this.state.name,
                 answer: false,
                 answered: false,
@@ -138,11 +183,13 @@ class local extends React.Component {
 
     answer(ans){
         let name = this.state.name
+        let room = this.state.room
         let answer = ans
-        socket.emit('answer', {name, answer})
+        socket.emit('answer', {name, answer, room})
         this.setState({
             answered: true,
             answer: false,
+            ans: ans,
         })
     }
 
@@ -176,7 +223,7 @@ class local extends React.Component {
                             <div>Name : {name}</div>
                             <div>Room : {room}</div>
                         </div>
-                        <div className={last.includes((score.find( ({ name }) => name === user )).correct) ? 'correct' : 'incorrect'}></div>
+                        <div className={last.correct.includes((score.find( ({ username }) => username === user )).answer) ? 'correct' : 'incorrect'}></div>
                         GET READY FOR THE NEXT QUESTION!
                     </>
                 )
