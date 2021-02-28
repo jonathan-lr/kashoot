@@ -33,16 +33,16 @@ class local extends React.Component {
         let name = this.state.name;
         let room = this.state.room;
         let valid = true;
-        let message = 'Invalid'
+        let message = 'INVALID'
 
-        if (!name.match(/^[a-zA-Z]+$/)){
+        if (!name.match(/^(?=[a-zA-Z0-9._æøå]{1,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/)){
             valid = false;
-            message += ' Name'
+            message += ' NAME'
         }
 
         if (room.length !== 5) {
             valid = false;
-            message += ' Room'
+            message += ' ROOM'
         }
 
         if (!valid){
@@ -200,8 +200,8 @@ class local extends React.Component {
                 return (
                     <>
                         <div className="top-bar">
-                            <div>Name : {name}</div>
-                            <div>Room : {room}</div>
+                            <div>NAME - {name}</div>
+                            <div>ROOM - {room}</div>
                         </div>
                         <div style={{display: "flex"}}>
                             <button onClick={ () => this.answer(1)} className="display-answer red" />
@@ -220,29 +220,33 @@ class local extends React.Component {
                 return (
                     <>
                         <div className="top-bar">
-                            <div>Name : {name}</div>
-                            <div>Room : {room}</div>
+                            <div>NAME - {name}</div>
+                            <div>ROOM - {room}</div>
                         </div>
                         <div className={last.correct.includes((score.find( ({ username }) => username === user )).answer) ? 'correct' : 'incorrect'}></div>
-                        GET READY FOR THE NEXT QUESTION!
+                        <div className="localFont">
+                            GET READY FOR THE NEXT QUESTION!
+                        </div>
                     </>
                 )
             } else if (answered) {
                 return (
                     <>
                         <div className="top-bar">
-                            <div>Name : {name}</div>
-                            <div>Room : {room}</div>
+                            <div>NAME - {name}</div>
+                            <div>ROOM - {room}</div>
                         </div>
-                        WAIT FOR OTHERS TO FINISH
+                        <div className="localFont">
+                            WAIT FOR OTHERS TO FINISH
+                        </div>
                     </>
                 )
             } else if (finished) {
                 return(
                     <>
                         <div className="top-bar">
-                            <div>Name : {name}</div>
-                            <div>Room : {room}</div>
+                            <div>NAME - {name}</div>
+                            <div>ROOM - {room}</div>
                         </div>
                         Quiz is over!
                         {score.map((item) => (
@@ -256,10 +260,12 @@ class local extends React.Component {
                 return (
                     <>
                         <div className="top-bar">
-                            <div>Name : {name}</div>
-                            <div>Room : {room}</div>
+                            <div>NAME - {name}</div>
+                            <div>ROOM - {room}</div>
                         </div>
-                        GET READY FOR HOST TO START
+                        <div className="localFont">
+                            GET READY FOR HOST TO START
+                        </div>
                     </>
                 )
             }

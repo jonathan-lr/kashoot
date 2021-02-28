@@ -13,7 +13,7 @@ export default function App() {
                 <header className="App-header">
                     <Switch>
                         <Route path="/create" component={Create}/>
-                        <Route path="/host" component={host} />
+                        <Route path="/xH0vw0Q1AUcxQIxl" component={host} />
                         <Route path="/play" component={local} />
                         <Route path="/" component={Home} />
                     </Switch>
