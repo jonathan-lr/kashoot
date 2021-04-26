@@ -203,16 +203,18 @@ class local extends React.Component {
                             <div>NAME - {name}</div>
                             <div>ROOM - {room}</div>
                         </div>
-                        <div style={{display: "flex"}}>
-                            <button onClick={ () => this.answer(1)} className="display-answer red" />
-                            <button onClick={ () => this.answer(2)} className="display-answer blue" />
-                        </div>
-                        <div style={{display: "flex"}}>
-                            <button onClick={ () => this.answer(3)} className="display-answer green" />
-                            <button onClick={ () => this.answer(4)} className="display-answer orange" />
-                        </div>
-                        <div className="btn btn-one" onClick={ () => this.answer(5)}>
-                            <span>Fake</span>
+                        <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", height: "100%"}}>
+                            <div style={{display: "flex"}}>
+                                <button onClick={ () => this.answer(1)} className="display-answer red" />
+                                <button onClick={ () => this.answer(2)} className="display-answer blue" />
+                            </div>
+                            <div style={{display: "flex"}}>
+                                <button onClick={ () => this.answer(3)} className="display-answer green" />
+                                <button onClick={ () => this.answer(4)} className="display-answer yellow" />
+                            </div>
+                            <div className="display-answer joker" style={{height: "100px", width: "320px"}} onClick={ () => this.answer(5)}>
+                                <span>Joker</span>
+                            </div>
                         </div>
                     </>
                 )
@@ -272,7 +274,7 @@ class local extends React.Component {
         } else {
             return (
                 <>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", alignSelf: "center", alignItems: "center", height: "100%"}}>
                         <div className={"error-box " + (error === '' ? 'hidden' : '')}>{error}</div>
                         <form onSubmit={this.joinGame} className="login-box">
                             <div className="field-text">
@@ -281,7 +283,7 @@ class local extends React.Component {
                             <div className="field-text">
                                 <input name="room" onChange={e => this.onTextChange(e)} value={room} placeholder="Room" />
                             </div>
-                            <button className="field-button">Join</button>
+                            <button className="field-button">JOIN</button>
                         </form>
                     </div>
                 </>

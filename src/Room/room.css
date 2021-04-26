@@ -1,12 +1,3 @@
-:root {
-    --blue: #0ac2d2;
-    --purple: #7bb7fa;
-    --lime: #60d7a9;
-    --orange: #fdc162;
-    --red: #fd6a62;
-    --pink: #f68dbb;
-}
-
 .display-answer {
     width: 150px;
     height: 150px;
@@ -21,42 +12,6 @@
 .display-answer:hover{
     transform: translate(-5px, -5px);
     box-shadow: 10px 10px rgba(0, 0, 0, .2);
-}
-
-.host-answer {
-    width: 25%;
-    height: 250px;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    font-weight: 100;
-    color: black;
-}
-
-.host-answer:last-child {
-    margin-right: 0;
-}
-
-.red {
-    background: #fe784b;
-}
-
-.blue {
-    background: #cefc6a;
-}
-
-.green {
-    background: #44f0f1;
-}
-
-.orange {
-    background: #8e36fd;
-}
-
-.pink {
-    background: #fd6a62;
 }
 
 .btn {
@@ -119,24 +74,31 @@
     transform: scale(0.1, 1);
 }
 
-.question-box {
+.video-box {
     padding: 10px;
     position: absolute;
-    top: 50px;
-    left: 10px;
+    top: 40px;
+    left: 0px;
+    margin: 10px;
     background: #ea2688;
-    height: 620px;
+    height: 90%;
+    width: 98%;
     box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
     animation: exist 1s linear;
 }
 
-.question-box:before {
-    content: 'IMAGE';
+.video-box:before {
+    content: 'VIDEO';
+    font-size: 40px;
     text-align: left;
     position: absolute;
     top: -40px; left: 0;
     height: 40px; width: 100%;
     background: #ea2688;
+}
+
+.video-box video {
+    height: 100%;
 }
 
 .questions-box {
@@ -153,6 +115,7 @@
 
 .questions-box:before {
     content: 'OPTIONS';
+    font-size: 40px;
     text-align: left;
     position: absolute;
     top: -40px; left: 0;
@@ -165,7 +128,7 @@
     bottom: 250px;
 }
 
-.question-box img {
+.question-box :is(img, video) {
     height: 600px;
     width: 1000px;
 }
@@ -190,30 +153,7 @@
     content: 'QUESTION';
     position: absolute;
     top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.widgets {
-    font-size: 30px;
-    font-weight: 100;
-    position: absolute;
-    top: 50px;
-    width: 340px;
-    right: 10px;
-    color: black;
-    height: 620px;
-    padding: 10px;
-    text-align: left;
-    background: #ea2688;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.widgets:before {
-    content: 'WIDGETS';
-    position: absolute;
-    top: -40px; left: 0;
+    font-size: 40px;
     height: 40px; width: 100%;
     background: #ea2688;
 }
@@ -222,8 +162,8 @@
     padding: 2em;
     position: relative;
     background: rgb(255 255 255 / 10%);
-    width: 50vw;
-    max-width: 12em;
+    width: 500px;
+    height: max-content;
 }
 
 .login-box:before {
@@ -236,7 +176,7 @@
 
 .error-box {
     padding: 2em;
-    background: rgba(0, 0, 0, 0.15);
+    background: rgb(255 255 255 / 10%);
     width: 50vw;
     max-width: 12em;
     position: absolute;
@@ -255,7 +195,6 @@
     color: black;
     font-size: 50px;
     font-weight: 100;
-    font-family: Monaco;
     text-align: center;
 }
 
@@ -266,7 +205,6 @@
     border: 0;
     color: black;
     cursor: pointer;
-    font-family: Monaco;
     font-size: 25px;
     font-weight: 100;
     outline: none;
@@ -297,20 +235,30 @@
     display: block;
     padding: 10px;
     width: 200px;
-    background: #ea2688;
+    background: var(--dark);
+    color: var(--light);
     border: 0;
-    color: black;
     cursor: pointer;
-    font-family: Monaco;
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 100;
     text-shadow: 0 1px 0 rgb(0 0 0 / 20%);
     outline: none;
     margin: auto;
 }
 
+.field-button a {
+    text-decoration: none;
+    color: var(--light);
+}
+
 .em1 {
     margin-top: 1em;
+}
+
+.stats-head {
+    font-size: 35px;
+    margin-top: 10px;
+    background: rgba(0,0,0,0.3);
 }
 
 .host-box {
@@ -328,15 +276,16 @@
     padding: 10px;
     border: none;
     width: 100%;
-    font-size: 20px;
-    font-family: Monaco;
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .top-bar {
     padding: 10px 0;
     position: absolute;
     top: 0;
-    background: #ea2688;
+    background: var(--dark);
+    color: var(--light);
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -362,11 +311,11 @@
     position: absolute;
     left: 0;
     top: 40px;
-    background: #ea2688;
-    font-family: Monaco;
-    color: black;
+    background: var(--dark2);
+    color: var(--light);
     font-weight: 100;
     font-size: 40px;
+    padding-left: 20px;
     clip-path: polygon(0 0, 100% 0%, 80% 100%, 0% 100%);
     width: 400px;
     text-align: left;
@@ -377,10 +326,10 @@
     position: absolute;
     right: 0;
     top: 40px;
-    background: #ea2688;
-    font-family: Monaco;
-    color: black;
+    background: var(--dark2);
+    color: var(--light);
     font-weight: 100;
+    padding-right: 20px;
     font-size: 40px;
     -webkit-clip-path: polygon(0 0, 100% 0%, 100% 100%, 20% 100%);
     clip-path: polygon(0 0, 100% 0%, 100% 100%, 20% 100%);
@@ -393,7 +342,7 @@
     padding: 20px 0;
     position: absolute;
     top: 0;
-    background: #ea2688;
+    background: var(--dark);
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -434,213 +383,13 @@
     animation: scale-down-center 0.6s linear, menu-jump 0.7s infinite 0.6s;
 }
 
-.lastAnswer-box {
-    padding: 10px;
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    background: #ea2688;
-    height: 190px;
-    width: 500px;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.lastAnswer-box:before {
-    content: 'ANSWERS';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.alert-box {
-    padding: 10px;
-    position: absolute;
-    top: 50px;
-    left: 540px;
-    background: #ea2688;
-    height: 190px;
-    width: 820px;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.alert-box:before {
-    content: 'ALERT';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.bar-box {
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 300px;
-    left: 0;
-    background: #ea2688;
-    height: 68%;
-    width: -webkit-fill-available;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.bar-box:before {
-    content: 'BAR:';
-    text-align: left;
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.bar-item {
-    display: flex;
-    flex-flow: wrap-reverse;
-    justify-content: space-around;
-}
-
-.item-bar {
-    width: 2em;
-    padding: 1em;
-    margin: 10px;
-}
-
-.bar {
-    width: 4em;
-    margin: 10px;
-    animation: bar-up 1s linear;
-    box-shadow: 5px 5px;
-    max-height: 465px;
-}
-
-@keyframes bar-up {
-    0% {
-        height: 0;
-    }
-    100%{
-        visibility: visible;
-    }
-
-}
-
-.next-box {
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    background: #ea2688;
-    height: 200px;
-    width: 500px;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.next-box:before {
-    content: 'NEXT';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.next-button {
-    padding: 10px;
-    width: 500px;
-    background: rgba(0,0,0,0.5);
-    border: 0;
-    color: black;
-    cursor: pointer;
-    font-family: Monaco;
-    font-size: 25px;
-    font-weight: 100;
-    outline: none;
-    margin: auto;
-    position: absolute;
-    bottom: 10px;
-}
-
-.score-box {
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 40px;
-    left: 0;
-    margin: 10px;
-    background: #ea2688;
-    height: 960px;
-    width: 600px;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.score-box:before {
-    content: 'SCORES';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.stats-box{
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 40px;
-    left: 630px;
-    margin: 10px;
-    background: #ea2688;
-    height: 960px;
-    width: 720px;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.stats-box:before {
-    content: 'STATS';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
-.final-box {
-    padding: 0 10px 10px;
-    position: absolute;
-    top: 40px;
-    left: 0;
-    margin: 10px;
-    background: #ea2688;
-    height: 960px;
-    width: -webkit-fill-available;
-    text-align: left;
-    box-shadow: inset 0px 5px 10px 0px rgb(0 0 0 / 75%);
-    animation: exist 1s linear;
-}
-
-.final-box:before {
-    content: 'FINAL SCORES';
-    position: absolute;
-    top: -40px; left: 0;
-    height: 40px; width: 100%;
-    background: #ea2688;
-}
-
 .transition {
     position: fixed;
     left: 0px;
     top: 0px;
     width: 200vw;
     height: 100%;
-    background: #000311;
+    background: var(--dark2);
     transform: translate(200vw, 0);
     animation: transition 1s linear;
     z-index: 100;
@@ -652,7 +401,7 @@
     top: 0px;
     width: 20vw;
     height: 100%;
-    background: #ea2688;
+    background: var(--light);
     transform: translate(200vw, 0);
     animation: transition 0.4s linear;
     z-index: 100;
@@ -664,22 +413,10 @@
     top: 0px;
     width: 40vw;
     height: 100%;
-    background: #ea2688;
+    background: var(--light2);
     transform: translate(200vw, 0);
     animation: transition 0.7s linear;
     z-index: 100;
-}
-
-@keyframes exist {
-    0% {
-        opacity: 0%;
-    }
-    50% {
-        opacity: 0%;
-    }
-    100% {
-        opacity: 100%;
-    }
 }
 
 @keyframes transition {
@@ -692,5 +429,5 @@
 }
 
 .localFont {
-    color: #ea2688;
+    color: var(--light);
 }

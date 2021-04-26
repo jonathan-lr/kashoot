@@ -6,6 +6,7 @@ import loop3 from '../Lupus Nocte - Howling.mp3'
 import Timer from "react-compound-timer";
 import Snowfall from "react-snowfall";
 import '../room.css'
+import './host.css'
 import shortid from "shortid";
 const socket = io('http://ts.cosmicreach.co.uk:27015');
 
@@ -22,6 +23,8 @@ l3.volume = 0.01;
 class host extends React.Component {
     constructor(props) {
         super(props);
+
+        this.section = this.section.bind(this)
 
         this.state = {
             answer: false,
@@ -42,6 +45,7 @@ class host extends React.Component {
             green: 0,
             yellow: 0,
             fake: 0,
+            section: 0,
         }
     }
 
@@ -49,6 +53,14 @@ class host extends React.Component {
         this.setState({
             bar: false,
             next: true,
+        })
+    }
+
+    section() {
+        let temp = this.state.section
+        temp += 1
+        this.setState({
+            section: temp
         })
     }
 
@@ -188,6 +200,9 @@ class host extends React.Component {
     nextQuestion(){
         let room = this.state.room
         socket.emit('next', {room})
+        this.setState({
+            section: 0
+        })
     }
 
     getRandomKey() {
@@ -195,164 +210,273 @@ class host extends React.Component {
     }
 
     render() {
-        const { room, question, answer, answers, next, score, type, finished, img, bar, red, blue, green, yellow, fake, last, alert } = this.state;
+        const { room, question, answer, answers, next, score, type, finished, img, bar, red, blue, green, yellow, fake, last, alert, section } = this.state;
             if (answer) {
-                return (
-                    <>
-                        <Snowfall />
-                        <div id="Transition4" key={this.getRandomKey()}>
-                            <div className="transition" />
-                            <div className="transition-item" />
-                            <div className="transition-item2" />
-                        </div>
-                        <div className="widgets" key={this.getRandomKey()}>
-                            <button className="skip-button" onClick={ () => this.nextQuestion() }>SKIP</button>
-                            <Timer
-                                initialTime={45000}
-                                direction="backward"
-                                checkpoints={[
-                                    {
-                                        time: 0,
-                                        callback: () => this.nextQuestion(),
-                                    }
-                                ]}
-                            >
-                                {() => (
-                                    <React.Fragment>
-                                        <div className="timer-text">
-                                            <Timer.Seconds />
-                                        </div>
-                                    </React.Fragment>
-                                )}
-                            </Timer>
-                        </div>
-                        {type === 2
-                            ? (
-                                <>
-                                    <div className="question-box" key={this.getRandomKey()}>
+                if (type === 3) {
+                    if (section === 0) {
+                        return (
+                            <>
+                                {/*<Snowfall*/}
+                                <div style={{position: "absolute", bottom: 30, right: 10, zIndex: "200"}}>
+                                    <button style={{width: "100px"}} className="field-button" onClick={ () => this.section() }>SKIP</button>
+                                </div>
+                                <div id="Transition4" key={this.getRandomKey()}>
+                                    <div className="transition" />
+                                    <div className="transition-item" />
+                                    <div className="transition-item2" />
+                                </div>
+                                <div className="video-box">
+                                    <video onEnded={() => this.section()} autoPlay src={img[0]} />
+                                </div>
+                            </>
+                        )
+                    } else if (section === 1) {
+                        return (
+                            <>
+                                {/*<Snowfall*/}
+                                <div id="Transition4" key={this.getRandomKey()}>
+                                    <div className="transition" />
+                                    <div className="transition-item" />
+                                    <div className="transition-item2" />
+                                </div>
+                                <div className="widgets" key={this.getRandomKey()}>
+                                    <button className="skip-button" onClick={ () => this.section() }>SKIP</button>
+                                    <Timer
+                                        initialTime={45000}
+                                        direction="backward"
+                                        checkpoints={[
+                                            {
+                                                time: 0,
+                                                callback: () => this.section(),
+                                            }
+                                        ]}
+                                    >
+                                        {() => (
+                                            <React.Fragment>
+                                                <div className="timer-text">
+                                                    <Timer.Seconds />
+                                                </div>
+                                            </React.Fragment>
+                                        )}
+                                    </Timer>
+                                </div>
+                                <div className="question-box" key={this.getRandomKey()}>
+                                    <video autoPlay muted loop src={img[0]} />
+                                </div>
+                                <div className="question-font" key={this.getRandomKey()}>{question}</div>
+                                <div className='questions-box' key={this.getRandomKey()}>
+                                    <div className="host-answer red"><span>{answers[0]}</span></div>
+                                    <div className="host-answer blue"><span>{answers[1]}</span></div>
+                                    <div className="host-answer green"><span>{answers[2]}</span></div>
+                                    <div className="host-answer orange"><span>{answers[3]}</span></div>
+                                </div>
+                            </>
+                        )
+                    } else {
+                        return (
+                            <>
+                                {/*<Snowfall*/}
+                                <div style={{position: "absolute", bottom: 30, right: 10, zIndex: "200"}}>
+                                    <button style={{width: "100px"}} className="field-button" onClick={ () => this.nextQuestion() }>SKIP</button>
+                                </div>
+                                <div id="Transition4" key={this.getRandomKey()}>
+                                    <div className="transition" />
+                                    <div className="transition-item" />
+                                    <div className="transition-item2" />
+                                </div>
+                                <div className="video-box">
+                                    <video onEnded={() => this.nextQuestion()} autoPlay src={img[1]} />
+                                </div>
+                            </>
+                        )
+                    }
+                } else {
+                    return (
+                        <>
+                            {/*<Snowfall*/}
+                            <div id="Transition4" key={this.getRandomKey()}>
+                                <div className="transition" />
+                                <div className="transition-item" />
+                                <div className="transition-item2" />
+                            </div>
+                            <div className="top-row">
+                                <div className="content-box" key={this.getRandomKey()}>
+                                    <div className="header">
+                                        content
+                                    </div>
+                                    <div className="container">
                                         <img src={img} alt="question" />
                                     </div>
-                                    <div className="question-font" key={this.getRandomKey()}>{question}</div>
-                                </>
-                                )
-                            : (
-                                <>
-                                    <span style={{width: "80%", height: 'auto'}} className="question-box question-font">{question}</span>
-                                </>
-                            )}
-                        <div className={(type === 2 ? 'questions-box' : 'questions-box2')} key={this.getRandomKey()}>
-                            <div className="host-answer red"><span>{answers[0]}</span></div>
-                            <div className="host-answer blue"><span>{answers[1]}</span></div>
-                            <div className="host-answer green"><span>{answers[2]}</span></div>
-                            <div className="host-answer orange"><span>{answers[3]}</span></div>
-                        </div>
-                    </>
-                )
+                                </div>
+                                <div className="question-box" key={this.getRandomKey()}>
+                                    <div className="header">question</div>
+                                    <div className="text">
+                                        {question}
+                                    </div>
+                                </div>
+                                <div className="widget-box" key={this.getRandomKey()}>
+                                    <div className="header">widgets</div>
+                                    <div className="widget">
+                                        <Timer initialTime={45000} direction="backward" checkpoints={[{time: 0, callback: () => this.nextQuestion(),}]}>
+                                            {() => (<Timer.Seconds />)}
+                                        </Timer>
+                                    </div>
+                                    <div className="widget" onClick={ () => this.nextQuestion() }>skip</div>
+                                </div>
+                            </div>
+                            <div className="option-box" key={this.getRandomKey()}>
+                                <div className="header">options</div>
+                                <div className="options">
+                                    <div className="option red"><span>{answers[0]}</span></div>
+                                    <div className="option blue"><span>{answers[1]}</span></div>
+                                    <div className="option green"><span>{answers[2]}</span></div>
+                                    <div className="option yellow"><span>{answers[3]}</span></div>
+                                </div>
+                            </div>
+                        </>
+                    )
+                }
             } else if (bar) {
                 let lastAnswers = last.correct.map(x => {
                     if (x === 5) {
-                        return "Fake"
+                        return "Joker"
                     } else {
                         return answers[x - 1]
                     }
                 })
                 return(
                     <>
-                        <Snowfall />
+                        <Snowfall/>
                         <div id="Transition3" key={this.getRandomKey()}>
                             <div className="transition" />
                             <div className="transition-item" />
                             <div className="transition-item2" />
                         </div>
-                        <div className="lastAnswer-box" key={this.getRandomKey()}>
-                            {lastAnswers.map((item) => (
-                                <div>
-                                    • {item}
-                                </div>
-                            ))}
+
+                        <div className="top-row">
+                            <div className="answer-box" key={this.getRandomKey()}>
+                                <div className="header">answers</div>
+                                {lastAnswers.map((item) => (
+                                    <div className="answer">
+                                        • {item}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="alert-box" key={this.getRandomKey()}>
+                                <div className="header">alert</div>
+                                <div className="alert">{alert}</div>
+                            </div>
+                            <div className="widget-box" key={this.getRandomKey()}>
+                                <div className="header">next</div>
+                                <div className="widget" onClick={ () => this.goNext()}>next</div>
+                            </div>
                         </div>
-                        <div className="next-box" key={this.getRandomKey()}>
-                            <button className="next-button" onClick={ () => this.goNext()}>NEXT</button>
-                        </div>
-                        <div className={"alert-box " + (alert === '' ? 'hidden' : '')} key={this.getRandomKey()}>
-                            {alert}
-                        </div>
+
                         <div className="bar-box" key={this.getRandomKey()}>
-                            <div className="bar-item">
-                                <div className="item-bar">{red}</div>
-                                <div className="item-bar">{blue}</div>
-                                <div className="item-bar">{green}</div>
-                                <div className="item-bar">{yellow}</div>
-                                <div className="item-bar">{fake}</div>
-                            </div>
-                            <div className="bar-item" style={{ flex: '1' }}>
-                                <div className="bar red" style={{height: red*50+10+"px"}}></div>
-                                <div className="bar blue" style={{height: blue*50+10+"px"}}></div>
-                                <div className="bar green" style={{height: green*50+10+"px"}}></div>
-                                <div className="bar orange" style={{height: yellow*50+10+"px"}}></div>
-                                <div className="bar pink" style={{height: fake*50+10+"px"}}></div>
-                            </div>
-                            <div className="bar-item">
-                                <div className="item-bar">{last.correct.includes(1) ? '✔' : '✘'}</div>
-                                <div className="item-bar">{last.correct.includes(2) ? '✔' : '✘'}</div>
-                                <div className="item-bar">{last.correct.includes(3) ? '✔' : '✘'}</div>
-                                <div className="item-bar">{last.correct.includes(4) ? '✔' : '✘'}</div>
-                                <div className="item-bar">{last.correct.includes(5) ? '✔' : '✘'}</div>
+                            <div className="header">answers</div>
+                            <div className="bars">
+                                <div className="bar red" style={{height: red*50+50+"px"}}><div className="text">{red}</div></div>
+                                <div className="bar blue" style={{height: blue*50+50+"px"}}><div className="text">{blue}</div></div>
+                                <div className="bar green" style={{height: green*50+50+"px"}}><div className="text">{green}</div></div>
+                                <div className="bar yellow" style={{height: yellow*50+50+"px"}}><div className="text">{yellow}</div></div>
+                                <div className="bar joker" style={{height: fake*50+50+"px"}}><div className="text">{fake}</div></div>
                             </div>
                         </div>
                     </>
                 )
             } else if (next) {
+                let streak = score.filter(o => o.streak === Math.max(...score.map(o => o.streak)));
+                let correct = score.filter(o => o.correct === Math.max(...score.map(o => o.correct)));
+                let firstN = score.filter(o => o.firstN === Math.max(...score.map(o => o.firstN)));
+                let lastN = score.filter(o => o.lastN === Math.max(...score.map(o => o.lastN)));
+                let minus = score.filter(o => o.minus === Math.max(...score.map(o => o.minus)));
+                let wrong = score.filter(o => o.wrong === Math.max(...score.map(o => o.wrong)));
                 return(
                     <>
-                        <Snowfall />
+                        {/*<Snowfall*/}
                         <div id="Transition2" key={this.getRandomKey()}>
                             <div className="transition" />
                             <div className="transition-item" />
                             <div className="transition-item2" />
                         </div>
-                        <div className="score-box" key={this.getRandomKey()}>
-                            {score.map((item) => (
-                                <button className="leaderboard" onClick={ () => this.kick(item.username)} key={item.username}>
-                                    <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
-                                    <span style={{flex: '1'}}>{item.username}</span>
-                                    <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score} {last.correct.includes((score.find( ({ username }) => username === item.username )).answer) ? '✔' : '✘'}</span>
-                                </button>
-                            ))}
-                        </div>
-                        <div className="stats-box" key={this.getRandomKey()}>
-                        </div>
-                        <div className="next-box" key={this.getRandomKey()}>
-                            <button className="next-button" onClick={ () => this.startGame()}>Next</button>
+                        <div className="score-row">
+                            <div className="score-box" key={this.getRandomKey()}>
+                                <div className="header">scores</div>
+                                <div className="scores">
+                                    {score.map((item) => (
+                                        <div className="score" onClick={ () => this.kick(item.username)} key={item.username}>
+                                            <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
+                                            <span style={{flex: '1'}}>{item.username}</span>
+                                            <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score} {last.correct.includes((score.find( ({ username }) => username === item.username )).answer) ? '✔' : '✘'}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="score-box" key={this.getRandomKey()}>
+                                <div className="header">header</div>
+                                <div className="scores">
+                                    <div className="score">Best Streak</div>
+                                    {streak.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.streak}</div>
+                                    ))}
+                                    <div className="score">Most Correct</div>
+                                    {correct.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.correct}</div>
+                                    ))}
+                                    <div className="score">Fastest Hand</div>
+                                    {firstN.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.firstN}</div>
+                                    ))}
+                                    <div className="score">Slowest Hand</div>
+                                    {lastN.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.lastN}</div>
+                                    ))}
+                                    <div className="score">Most Traps Triggered</div>
+                                    {minus.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.minus}</div>
+                                    ))}
+                                    <div className="score">Dissapointing Performance</div>
+                                    {wrong.slice(0,3).map((item) => (
+                                        <div className="score2">{item.username} - {item.wrong}</div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="widget-box" key={this.getRandomKey()}>
+                                <div className="header">next</div>
+                                <div className="widget" onClick={ () => this.startGame()}>next</div>
+                            </div>
                         </div>
                     </>
                 )
             } else if (finished) {
                 return(
                     <>
-                        <Snowfall />
+                        {/*<Snowfall*/}
                         <div id="Transition1" key={this.getRandomKey()}>
                             <div className="transition" />
                             <div className="transition-item" />
                             <div className="transition-item2" />
                         </div>
-                        <div className="final-box" key={this.getRandomKey()}>
-                            {score.map((item) => (
-                                <button className="leaderboard" onClick={ () => this.kick(item.username)} key={item.username}>
-                                    <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
-                                    <span style={{flex: '1'}}>{item.username}</span>
-                                    <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score}</span>
-                                </button>
-                            ))}
+                        <div className="score-box" style={{margin:"10px"}} key={this.getRandomKey()}>
+                            <div className="header">final scores</div>
+                            <div className="scores">
+                                {score.map((item) => (
+                                    <div className="score" onClick={ () => this.kick(item.username)} key={item.username}>
+                                        <span style={{marginLeft: '10px', width: '110px', maxWidth: '110px', textAlign:'start'}}>{score.indexOf(item)+1}.</span>
+                                        <span style={{flex: '1'}}>{item.username}</span>
+                                        <span style={{width: '120px', maxWidth: '120px', textAlign: 'end'}}>{item.score}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </>
                 )
             } else {
                 return (
                     <>
-                        <Snowfall />
+                        {/*<Snowfall*/}
                         <div className="top-host">
-                            <div className="logo" >KASHOOT.CO.UK</div>
+                            <div className="logo">KASHOOT.CO.UK</div>
                             <div className="roomCode">ROOM - {room}</div>
                         </div>
                         <div className="host-box">

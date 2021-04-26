@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 class Home extends React.Component {
     render() {
         return (
-            <>
-                <p>
+            <div style={{alignItems: "center", justifyContent: "center", fontSize: "50px", height: "100%", display: "flex", flexDirection: "column"}}>
+                <p style={{color: "var(--light)"}}>
                     Welcome To Kashoot
                 </p>
-                <p>
+                <p style={{color: "var(--light)"}}>
                     Here we want to kashoot our selves
                 </p>
-                <button className="lets-begin"><Link to="/play">Lets Begin</Link></button>
-            </>
+                <button style={{margin: "unset"}} className="field-button"><Link to="/play">LETS BEGIN</Link></button>
+            </div>
         );
     }
 }
